@@ -17,13 +17,21 @@ library(lubridate)
 library(colorspace)
 library(openintro)
 library(gghighlight)
+library(scales)
 ```
 
 # Part 1 - Labeling states
 
-```{r}
+```{r, fig.width = 9, fig.height = 6}
 ggplot(state_stats, aes(x = homeownership, y = pop2010)) + 
-  geom_text(aes(label = abbr))
+  geom_text(aes(label = abbr), vjust = 0.5, hjust = 0.5, check_overlap = TRUE) + 
+  labs(title = "Homeownership by State and Population in 2010", 
+       x = "Homeownership", 
+       y = "2010 Population") + 
+  theme(axis.title.x = element_text(margin = margin(t = 10)), axis.title.y = element_text(margin = margin(t = 10))) + 
+  scale_y_continuous(labels = label_number(scale = 1/1000000, suffix = "M")) + 
+  scale_x_continuous(labels = label_percent(scale = 1)) +
+  theme_economist()
 ```
 
 # Part 2 - Another look at Durham AQI
