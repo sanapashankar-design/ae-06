@@ -65,15 +65,15 @@ Complete the plot below.
 
 dch_2022 |>
   ggplot(aes(x = date, y = aqi_value, group = 1)) +
-  geom_line() +
+  geom_line(size = 1, na.rm = TRUE) +
   scale_x_date(
     name = NULL, date_labels = "%b",
     limits = c(ymd("2022-01-01"), ymd("2023-03-01"))
   ) +
   geom_text(
-    data = aqi_levels,
-    aes(x = ymd("2023-02-28"), y = aqi_mid, label = level, color = color),
+    data = aqi_levels, aes(x = ymd("2023-02-28"), y = aqi_mid, label = level, color = color), fontface = "bold", size = 5, hjust = 1
   ) +
+  scale_color_identity() +
   annotate(
     geom = "text",
     x = c(ymd("2022-01-01"), ymd("2023-01-01")), y = -80,
@@ -86,7 +86,10 @@ dch_2022 |>
     subtitle = "Durham-Chapel Hill, NC",
     caption = "Source: EPA Daily Air Quality Tracker"
   ) +
-  theme_minimal()
+  scale_y_continuous(breaks = c(0,50,100,150,200,300,400)) +
+  theme(panel.grid.minor.y = element_blank(), 
+        panel.grid.minor.x = element_blank(),
+        plot.caption = element_text(vjust = -2))
 ```
 
 # Part 3 - Highlighting with gghighlight
@@ -112,6 +115,17 @@ sf <- sf |>
 
 ```{r}
 #| label: sf-data-viz
+
+ggplot(sf, aes(x = day_of_year, y = aqi_value, group = year)) + 
+  geom_line(color = "gray") + 
+  geom_line(data = sf %>%
+              filter(year == 2016), 
+            color = "red") +
+  labs(title = "AQI levels in SF in 2016", 
+       subtitle = "Verses all years 2016-2022", 
+       x = "Day of year", 
+       y = "AQI value")
+
 
 # add code here
 ```
